@@ -3,13 +3,17 @@ from fastapi import FastAPI
 import asyncio
 from telethon import TelegramClient, events
 import uvicorn
+import sys
 
 # --- Environment variables ---
-api_id = int(os.getenv("API_ID"))
-api_hash = os.getenv("API_HASH")
-session_name = os.getenv("SESSION_NAME")
-bot_token = os.getenv("BOT_TOKEN")  # Optional
+api_id = int(os.getenv("API_ID", 0))
+api_hash = os.getenv("API_HASH", "")
+session_name = os.getenv("SESSION_NAME", "userbot")
 allowed_users_raw = os.getenv("ALLOWED_USERS", "").strip()
+
+if not api_id or not api_hash:
+    print("❌ API_ID and API_HASH must be set in environment variables.")
+    sys.exit(1)
 
 # --- Allowed users ---
 ALLOWED_USERS = set()
@@ -18,10 +22,8 @@ if allowed_users_raw:
 
 # --- Telegram client ---
 client = TelegramClient(session_name, api_id, api_hash)
-if bot_token:
-    client = TelegramClient(session_name, api_id, api_hash).start(bot_token=bot_token)
 
-# --- Config ---
+# === Config ===
 TRIGGER_TAG = "!tagall"
 TRIGGER_STOP = "!stop"
 tagging_active = {}
@@ -105,6 +107,11 @@ async def init_owner():
     global OWNER_ID
     await client.connect()  # Headless-safe
     me = await client.get_me()
+    if me is None:
+        print(
+            "❌ Could not retrieve account info. Make sure the .session file exists and SESSION_NAME is correct."
+        )
+        sys.exit(1)
     OWNER_ID = me.id
     print(f"👑 Owner ID detected: {OWNER_ID}")
 
