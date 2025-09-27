@@ -3,6 +3,9 @@ import sys
 import asyncio
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
+from fastapi import FastAPI
+import uvicorn
+import threading
 
 # --- Environment variables ---
 API_ID = os.getenv("API_ID")
@@ -127,10 +130,25 @@ async def init_owner():
     OWNER_ID = me.id
     print(f"👑 Owner ID detected: {OWNER_ID}")
 
+# --- FastAPI health server ---
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "Userbot is alive"}
+
+def run_health_server():
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
 # --- Run bot ---
 async def main():
     await init_owner()
     print("🚀 Userbot is running...")
+
+    # Start FastAPI server in a separate thread
+    threading.Thread(target=run_health_server, daemon=True).start()
+
     await client.run_until_disconnected()
 
 if __name__ == "__main__":
