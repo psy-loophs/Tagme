@@ -5,15 +5,26 @@ from telethon import TelegramClient, events
 import uvicorn
 import sys
 
-# --- Environment variables ---
-api_id = int(os.getenv("API_ID", 0))
-api_hash = os.getenv("API_HASH", "")
-session_name = os.getenv("SESSION_NAME", "userbot")
+# --- Environment variables (no defaults) ---
+api_id = os.getenv("API_ID")
+api_hash = os.getenv("API_HASH")
+session_name = os.getenv("SESSION_NAME")
 allowed_users_raw = os.getenv("ALLOWED_USERS", "").strip()
 
-if not api_id or not api_hash:
-    print("❌ API_ID and API_HASH must be set in environment variables.")
+# --- Validate required env vars ---
+missing = []
+if not api_id:
+    missing.append("API_ID")
+if not api_hash:
+    missing.append("API_HASH")
+if not session_name:
+    missing.append("SESSION_NAME")
+
+if missing:
+    print(f"❌ Missing required environment variables: {', '.join(missing)}")
     sys.exit(1)
+
+api_id = int(api_id)  # convert after validation
 
 # --- Allowed users ---
 ALLOWED_USERS = set()
