@@ -44,3 +44,13 @@ async def main():
 
 with client:
     client.loop.run_until_complete(main())
+
+> 📝 When you run this script, you will be asked to:
+> - **API_ID** → The numeric ID from [my.telegram.org](https://my.telegram.org).  
+> - **API_HASH** → The secret hash from the same place.  
+> - **Session name** → Any name you like (e.g., `mention_bot`).  
+>
+> The session name determines the filename of your session (e.g., entering `mention_bot` creates `mention_bot.session`).  
+> You can create multiple sessions with different names if needed.  
+>
+> ⚡ Important: You must always provide your own **API ID**, **API Hash**, and a **session name** whenever you run this code (locally or on a server).
