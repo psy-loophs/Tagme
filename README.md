@@ -29,23 +29,31 @@ You need a Telegram session file (`mention_bot.session`) before deployment.
 
 Create a file called `generate_session.py` with this code:
 
+
 ```python
 from telethon import TelegramClient
+from telethon.sessions import StringSession
 
 api_id = int(input("Enter your API_ID: "))
 api_hash = input("Enter your API_HASH: ")
 session_name = input("Enter your session name: ")
 
-client = TelegramClient(session_name, api_id, api_hash)
+client = TelegramClient(StringSession(), api_id, api_hash)
 
 async def main():
     await client.start()
+
+    # Save session string to file as text
+    with open(f"{session_name}.session", "w") as f:
+        f.write(client.session.save())
+
     print(f"✅ Session file generated: {session_name}.session")
+    print(f"💡 Session string:\n{client.session.save()}")
 
 with client:
     client.loop.run_until_complete(main())
-
 ```
+
 
 📝 When you run this script, you will be asked to:
 
