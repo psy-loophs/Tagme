@@ -13,7 +13,7 @@ ALLOWED_USERS_RAW = os.getenv("ALLOWED_USERS", "").strip()
 PORT = int(os.getenv("PORT", 8000))
 
 # --- Validate required env vars ---
-missing = []
+"""missing = []
 if not API_ID:
     missing.append("API_ID")
 if not API_HASH:
@@ -25,7 +25,7 @@ if missing:
     print(f"❌ Missing required environment variables: {', '.join(missing)}")
     sys.exit(1)
 
-API_ID = int(API_ID)
+API_ID = int(API_ID)"""
 
 # --- Allowed users set ---
 ALLOWED_USERS = set()
