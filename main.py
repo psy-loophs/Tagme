@@ -1,40 +1,47 @@
 import os
-from fastapi import FastAPI
+import sys
 import asyncio
 from telethon import TelegramClient, events
+from fastapi import FastAPI
 import uvicorn
-import sys
 
-# --- Environment variables (no defaults) ---
-api_id = os.getenv("API_ID")
-api_hash = os.getenv("API_HASH")
-session_name = os.getenv("SESSION_NAME")
-allowed_users_raw = os.getenv("ALLOWED_USERS", "").strip()
+# --- Environment variables ---
+API_ID = os.getenv("API_ID")
+API_HASH = os.getenv("API_HASH")
+SESSION_NAME = os.getenv("SESSION_NAME")
+ALLOWED_USERS_RAW = os.getenv("ALLOWED_USERS", "").strip()
+PORT = int(os.getenv("PORT", 8000))
 
 # --- Validate required env vars ---
 missing = []
-if not api_id:
+if not API_ID:
     missing.append("API_ID")
-if not api_hash:
+if not API_HASH:
     missing.append("API_HASH")
-if not session_name:
+if not SESSION_NAME:
     missing.append("SESSION_NAME")
 
 if missing:
     print(f"❌ Missing required environment variables: {', '.join(missing)}")
     sys.exit(1)
 
-api_id = int(api_id)  # convert after validation
+API_ID = int(API_ID)
 
-# --- Allowed users ---
+# --- Allowed users set ---
 ALLOWED_USERS = set()
-if allowed_users_raw:
-    ALLOWED_USERS = {int(uid.strip()) for uid in allowed_users_raw.split(",") if uid.strip().isdigit()}
+if ALLOWED_USERS_RAW:
+    ALLOWED_USERS = {int(uid.strip()) for uid in ALLOWED_USERS_RAW.split(",") if uid.strip().isdigit()}
+
+# --- Absolute session path ---
+SESSION_PATH = os.path.join(os.getcwd(), f"{SESSION_NAME}.session")
+if not os.path.isfile(SESSION_PATH):
+    print(f"❌ Session file not found: {SESSION_PATH}")
+    sys.exit(1)
 
 # --- Telegram client ---
-client = TelegramClient(session_name, api_id, api_hash)
+client = TelegramClient(SESSION_PATH, API_ID, API_HASH)
 
-# === Config ===
+# --- Config ---
 TRIGGER_TAG = "!tagall"
 TRIGGER_STOP = "!stop"
 tagging_active = {}
@@ -116,11 +123,19 @@ async def stop_tagging(event):
 # --- Initialize owner ---
 async def init_owner():
     global OWNER_ID
-    await client.connect()  # Headless-safe
+    await client.connect()
+    if not await client.is_user_authorized():
+        print(
+            f"❌ Session file is invalid or not authorized: {SESSION_PATH}. "
+            f"Make sure it was generated with the same API_ID/API_HASH."
+        )
+        sys.exit(1)
+
     me = await client.get_me()
     if me is None:
         print(
-            "❌ Could not retrieve account info. Make sure the .session file exists and SESSION_NAME is correct."
+            f"❌ Could not retrieve account info from session: {SESSION_PATH}. "
+            f"Make sure the session is valid."
         )
         sys.exit(1)
     OWNER_ID = me.id
@@ -137,11 +152,12 @@ async def root():
 async def main():
     await init_owner()
     print("🚀 Userbot is running...")
+
     # Start Telegram client in background
     asyncio.create_task(client.run_until_disconnected())
+
     # Start FastAPI server
-    port = int(os.getenv("PORT", 8000))
-    uvicorn_config = uvicorn.Config(app, host="0.0.0.0", port=port, log_level="info")
+    uvicorn_config = uvicorn.Config(app, host="0.0.0.0", port=PORT, log_level="info")
     server = uvicorn.Server(uvicorn_config)
     await server.serve()
 
