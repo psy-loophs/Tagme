@@ -5,13 +5,30 @@ Includes owner-only and allowed-users access control, and stop/start tagging sup
 
 ---
 
-## ✨ Features
+## ✨ Usage
 - `/tagall` → Mentions all group members.  
 - Prevents multiple tagging sessions at once.  
 - `!stop` → Stops tagging process.  
 - Access control:
   - If `ALLOWED_USERS` is empty → only the **API owner** can use the bot.
   - If `ALLOWED_USERS` is set → both the API owner and listed users can use it.
+ 
+  ---
+
+  ## Features
+
+- First name mentions: 
+  - Instead of showing full usernames, the bot tag members using their first names only, making the chat cleaner.
+
+- Custom messages:
+  - Use !tagall <message> to mention all members along with your custom message.
+
+Works whether you reply to a message or not.
+
+
+- Reply tagging:
+  - If you reply to any message with !tagall, the bot will tag all members in reply to that message.
+
 
 ---
 
