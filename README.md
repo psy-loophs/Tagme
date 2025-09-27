@@ -47,12 +47,36 @@ with client:
 
 ```
 
-> 📝 When you run this script, you will be asked to:
-> - **API_ID** → The numeric ID from [my.telegram.org](https://my.telegram.org).  
-> - **API_HASH** → The secret hash from the same place.  
-> - **Session name** → Any name you like (e.g., `mention_bot`).  
->
-> The session name determines the filename of your session (e.g., entering `mention_bot` creates `mention_bot.session`).  
-> You can create multiple sessions with different names if needed.  
->
-> ⚡ Important: You must always provide your own **API ID**, **API Hash**, and a **session name** whenever you run this code (locally or on a server).
+📝 When you run this script, you will be asked to:
+
+⦁ API_ID → The numeric ID from my.telegram.org.
+
+⦁ API_HASH → The secret hash from the same place.
+
+⦁ Session name → Any name you like (e.g., mention_bot).
+
+
+⚡ During the first login, you will also provide:
+
+⦁ Phone number → Your Telegram account number.
+
+⦁ OTP → One-time password sent via SMS or Telegram app.
+
+⦁ 2FA password → If two-factor authentication is enabled.
+
+
+✅ After successful login, this script generates a session string, which is a critical piece for headless deployments:
+
+You must store this session string in your .env file (as SESSION_STRING) or as an environment variable.
+
+Using the session string allows the bot to run without re-entering your phone number, OTP, or 2FA.
+
+Keep the session string private — anyone with it can access your Telegram account.
+
+
+⚡ Important: To run this bot, you must provide your own API ID, API Hash, and SESSION_STRING. Once stored, the bot can start automatically without further manual login.
+
+
+
+
+---
