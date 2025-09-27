@@ -2,11 +2,12 @@ import os
 import sys
 import asyncio
 from telethon import TelegramClient, events
+from telethon.sessions import StringSession
 
 # --- Environment variables ---
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
-SESSION_NAME = os.getenv("SESSION_NAME")
+SESSION_STRING = os.getenv("SESSION_STRING")
 ALLOWED_USERS_RAW = os.getenv("ALLOWED_USERS", "").strip()
 
 # --- Validate required env vars ---
@@ -15,8 +16,8 @@ if not API_ID:
     missing.append("API_ID")
 if not API_HASH:
     missing.append("API_HASH")
-if not SESSION_NAME:
-    missing.append("SESSION_NAME")
+if not SESSION_STRING:
+    missing.append("SESSION_STRING")
 
 if missing:
     print(f"❌ Missing required environment variables: {', '.join(missing)}")
@@ -29,15 +30,8 @@ ALLOWED_USERS = set()
 if ALLOWED_USERS_RAW:
     ALLOWED_USERS = {int(uid.strip()) for uid in ALLOWED_USERS_RAW.split(",") if uid.strip().isdigit()}
 
-# --- Absolute session path ---
-SESSION_PATH = os.path.join(os.getcwd(), f"{SESSION_NAME}.session")
-if not os.path.isfile(SESSION_PATH):
-    print(f"❌ Session file not found: {SESSION_PATH}")
-    print("💡 Upload your session file to the project folder on Render.")
-    sys.exit(1)
-
-# --- Telegram client ---
-client = TelegramClient(SESSION_PATH, API_ID, API_HASH)
+# --- Telegram client using string session ---
+client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
 
 # --- Config ---
 TRIGGER_TAG = "!tagall"
@@ -123,18 +117,12 @@ async def init_owner():
     global OWNER_ID
     await client.connect()
     if not await client.is_user_authorized():
-        print(
-            f"❌ Session file is invalid or not authorized: {SESSION_PATH}. "
-            f"Make sure it was generated with the same API_ID/API_HASH."
-        )
+        print("❌ Session is invalid or expired. Make sure SESSION_STRING is correct.")
         sys.exit(1)
 
     me = await client.get_me()
     if me is None:
-        print(
-            f"❌ Could not retrieve account info from session: {SESSION_PATH}. "
-            f"Make sure the session is valid."
-        )
+        print("❌ Could not retrieve account info. SESSION_STRING may be invalid.")
         sys.exit(1)
     OWNER_ID = me.id
     print(f"👑 Owner ID detected: {OWNER_ID}")
