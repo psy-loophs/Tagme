@@ -1,13 +1,11 @@
 import os
-from dotenv import load_dotenv
-from telethon import TelegramClient, events
+from telethon import TelegramClient
 
-# === Load from .env ===
-load_dotenv()
 api_id = int(os.getenv("API_ID"))
 api_hash = os.getenv("API_HASH")
-session_name = os.getenv("SESSION_NAME", "mention_bot")
+session_name = os.getenv("SESSION_NAME")
 
+client = TelegramClient(session_name, api_id, api_hash)
 # Parse allowed users
 allowed_users_raw = os.getenv("ALLOWED_USERS", "").strip()
 ALLOWED_USERS = set()
