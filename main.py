@@ -1,5 +1,5 @@
 import os
-from telethon import TelegramClient
+from telethon import TelegramClient, events
 
 api_id = int(os.getenv("API_ID"))
 api_hash = os.getenv("API_HASH")
