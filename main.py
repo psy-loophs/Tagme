@@ -2,18 +2,15 @@ import os
 import sys
 import asyncio
 from telethon import TelegramClient, events
-from fastapi import FastAPI
-import uvicorn
 
 # --- Environment variables ---
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
 SESSION_NAME = os.getenv("SESSION_NAME")
 ALLOWED_USERS_RAW = os.getenv("ALLOWED_USERS", "").strip()
-PORT = int(os.getenv("PORT", 8000))
 
 # --- Validate required env vars ---
-"""missing = []
+missing = []
 if not API_ID:
     missing.append("API_ID")
 if not API_HASH:
@@ -25,7 +22,7 @@ if missing:
     print(f"❌ Missing required environment variables: {', '.join(missing)}")
     sys.exit(1)
 
-API_ID = int(API_ID)"""
+API_ID = int(API_ID)
 
 # --- Allowed users set ---
 ALLOWED_USERS = set()
@@ -36,6 +33,7 @@ if ALLOWED_USERS_RAW:
 SESSION_PATH = os.path.join(os.getcwd(), f"{SESSION_NAME}.session")
 if not os.path.isfile(SESSION_PATH):
     print(f"❌ Session file not found: {SESSION_PATH}")
+    print("💡 Upload your session file to the project folder on Render.")
     sys.exit(1)
 
 # --- Telegram client ---
@@ -141,25 +139,11 @@ async def init_owner():
     OWNER_ID = me.id
     print(f"👑 Owner ID detected: {OWNER_ID}")
 
-# --- FastAPI web server for uptime monitoring ---
-app = FastAPI()
-
-@app.get("/")
-async def root():
-    return {"status": "Userbot is running 🚀"}
-
-# --- Run bot and web server ---
+# --- Run bot ---
 async def main():
     await init_owner()
     print("🚀 Userbot is running...")
-
-    # Start Telegram client in background
-    asyncio.create_task(client.run_until_disconnected())
-
-    # Start FastAPI server
-    uvicorn_config = uvicorn.Config(app, host="0.0.0.0", port=PORT, log_level="info")
-    server = uvicorn.Server(uvicorn_config)
-    await server.serve()
+    await client.run_until_disconnected()
 
 if __name__ == "__main__":
     asyncio.run(main())
