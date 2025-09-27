@@ -34,7 +34,7 @@ from telethon import TelegramClient
 
 api_id = int(input("Enter your API_ID: "))
 api_hash = input("Enter your API_HASH: ")
-session_name = "mention_bot"
+session_name = input("Enter your session name: ")
 
 client = TelegramClient(session_name, api_id, api_hash)
 
