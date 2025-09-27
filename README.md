@@ -43,7 +43,7 @@ async def main():
     print(f"✅ Session file generated: {session_name}.session")
 
 with client:
-    client.loop.run_until_complete(main()) ```
+    client.loop.run_until_complete(main()) 
 
 > 📝 When you run this script, you will be asked to:
 > - **API_ID** → The numeric ID from [my.telegram.org](https://my.telegram.org).  
