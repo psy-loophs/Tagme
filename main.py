@@ -49,7 +49,8 @@ async def is_authorized(user_id: int) -> bool:
     return user_id == OWNER_ID or user_id in ALLOWED_USERS
 
 # --- Event handlers ---
-@client.on(events.NewMessage(pattern=f"^{TRIGGER_TAG}(.*)"))
+@client.on(events.NewMessage(pattern=f"^{TRIGGER_TAG}(.*)", regex_flags=re.DOTALL))
+# @client.on(events.NewMessage(pattern=f"^{TRIGGER_TAG}(.*)"))
 async def mention_all(event):
     global OWNER_ID
     sender_id = event.sender_id  # ✅ safe: always available
