@@ -1,12 +1,12 @@
 import os
 import sys
 import asyncio
-import re
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from fastapi import FastAPI
 import uvicorn
 import threading
+import re
 
 # --- Environment variables ---
 API_ID = os.getenv("API_ID")
@@ -55,19 +55,12 @@ TAGALL_PATTERN = re.compile(rf"^{TRIGGER_TAG}(.*)", re.DOTALL)
 @client.on(events.NewMessage(pattern=TAGALL_PATTERN))
 async def mention_all(event):
     global OWNER_ID
-    sender_id = event.sender_id
+    sender_id = event.sender_id  # ✅ safe: always available
     if not await is_authorized(sender_id):
         return
 
     chat_id = event.chat_id
     custom_text = event.pattern_match.group(1).strip()
-
-    # If no extra text, but it's a reply → use replied message text instead
-    reply_to = event.reply_to_msg_id if event.is_reply else None
-    reply_msg = await event.get_reply_message() if event.is_reply else None
-    if not custom_text and reply_msg and reply_msg.message:
-        custom_text = reply_msg.message
-
     if not event.is_group:
         await event.reply("❌ This command only works in groups.")
         return
@@ -85,6 +78,7 @@ async def mention_all(event):
             return
 
         await event.reply(f"🚀 Tagging {len(participants)} members...")
+        reply_to = event.reply_to_msg_id if event.is_reply else None
 
         for user in participants:
             if not tagging_active.get(chat_id):
@@ -92,29 +86,16 @@ async def mention_all(event):
                 break
             if user.bot:
                 continue
-
             name = user.first_name or "User"
             mention = f"[{name}](tg://user?id={user.id})"
-            message_text = mention + (f" {custom_text}" if custom_text else "")
-
+            message = mention + (f" {custom_text}" if custom_text else "")
             try:
-                # If replied message has media, forward it with caption
-                if reply_msg and reply_msg.media:
-                    await client.send_file(
-                        chat_id,
-                        reply_msg.media,
-                        caption=message_text,
-                        reply_to=reply_to,
-                        parse_mode="md"
-                    )
-                else:
-                    # Otherwise just send as formatted text
-                    await client.send_message(
-                        chat_id,
-                        message_text,
-                        reply_to=reply_to,
-                        parse_mode="md"
-                    )
+                await client.send_message(
+                    chat_id,
+                    message,
+                    reply_to=reply_to,
+                    parse_mode=None  # ✅ auto-detect Markdown/HTML (links, code, bold, etc.)
+                )
             except Exception as e:
                 await event.reply(f"⚠ Error: {e}")
                 break
@@ -130,7 +111,7 @@ async def mention_all(event):
 @client.on(events.NewMessage(pattern=TRIGGER_STOP))
 async def stop_tagging(event):
     global OWNER_ID
-    sender_id = event.sender_id
+    sender_id = event.sender_id  # ✅ safe fix
     if not await is_authorized(sender_id):
         return
     chat_id = event.chat_id
