@@ -17,8 +17,8 @@ Includes owner-only and allowed-users access control, and stop/start tagging sup
 
   ## Features
 
-- First name mentions: 
-  - Instead of showing full usernames, the bot tag members using their first names only, making the chat cleaner.
+- Text mentions: 
+  - Instead of showing full usernames, the bot tag members by text mention , making the chat cleaner.
 
 - Custom messages:
   - Use !tagall &lt;message&gt; to mention all members along with your custom message.
