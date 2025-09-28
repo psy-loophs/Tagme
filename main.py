@@ -1,20 +1,20 @@
 import os
 import sys
 import asyncio
-import re   # ✅ added
+import re   
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from fastapi import FastAPI
 import uvicorn
 import threading
 
-# --- Environment variables ---
+
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
 SESSION_STRING = os.getenv("SESSION_STRING")
 ALLOWED_USERS_RAW = os.getenv("ALLOWED_USERS", "").strip()
 
-# --- Validate required env vars ---
+
 missing = []
 if not API_ID:
     missing.append("API_ID")
@@ -29,33 +29,33 @@ if missing:
 
 API_ID = int(API_ID)
 
-# --- Allowed users set ---
+
 ALLOWED_USERS = set()
 if ALLOWED_USERS_RAW:
     ALLOWED_USERS = {int(uid.strip()) for uid in ALLOWED_USERS_RAW.split(",") if uid.strip().isdigit()}
 
-# --- Telegram client using string session ---
+
 client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
 
-# --- Config ---
+
 TRIGGER_TAG = "!tagall"
 TRIGGER_STOP = "!stop"
 tagging_active = {}
 OWNER_ID = None
 
-# --- Authorization helper ---
+
 async def is_authorized(user_id: int) -> bool:
     if not ALLOWED_USERS:
         return user_id == OWNER_ID
     return user_id == OWNER_ID or user_id in ALLOWED_USERS
 
-# --- Event handlers ---
-TAGALL_PATTERN = re.compile(rf"^{TRIGGER_TAG}(.*)", re.DOTALL)  # ✅ allow multiline
+
+TAGALL_PATTERN = re.compile(rf"^{TRIGGER_TAG}(.*)", re.DOTALL)  
 
 @client.on(events.NewMessage(pattern=TAGALL_PATTERN))
 async def mention_all(event):
     global OWNER_ID
-    sender_id = event.sender_id  # ✅ safe: always available
+    sender_id = event.sender_id 
     if not await is_authorized(sender_id):
         return
 
@@ -106,7 +106,7 @@ async def mention_all(event):
 @client.on(events.NewMessage(pattern=TRIGGER_STOP))
 async def stop_tagging(event):
     global OWNER_ID
-    sender_id = event.sender_id  # ✅ safe fix
+    sender_id = event.sender_id  
     if not await is_authorized(sender_id):
         return
     chat_id = event.chat_id
@@ -116,7 +116,7 @@ async def stop_tagging(event):
     else:
         await event.reply("⚠ No tagging in progress.")
 
-# --- Initialize owner ---
+
 async def init_owner():
     global OWNER_ID
     await client.connect()
@@ -131,7 +131,7 @@ async def init_owner():
     OWNER_ID = me.id
     print(f"👑 Owner ID detected: {OWNER_ID}")
 
-# --- FastAPI health server ---
+
 app = FastAPI()
 
 @app.get("/")
@@ -142,12 +142,12 @@ def run_health_server():
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
 
-# --- Run bot ---
+
 async def main():
     await init_owner()
     print("🚀 Userbot is running...")
 
-    # Start FastAPI server in a separate thread
+    
     threading.Thread(target=run_health_server, daemon=True).start()
 
     await client.run_until_disconnected()
