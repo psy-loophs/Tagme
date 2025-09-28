@@ -5,11 +5,6 @@ Includes owner-only and allowed-users access control, and stop/start tagging sup
 
 ---
 
-## License
-
-This repository is public for viewing or cloning only.
-
-You **may not copy, modify, redistribute, or use this code** without explicit permission from the owner. See LICENSE file for details.
 
 ## ✨ Usage
 - `/tagall` → Mentions all group members.  
