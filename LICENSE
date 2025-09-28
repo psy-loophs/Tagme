@@ -1,28 +1,36 @@
 MIT License – Telegram Userbot
 
 Copyright (c) 2025 JAYDEV JAYAMON (psy-loophs)
+GitHub: https://github.com/psy-loophs
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this Telegram userbot and associated documentation files (the "Software"), to use, copy, modify, merge, publish, distribute, and sublicense the Software, for any purpose, including personal, educational, or commercial use, provided that the original copyright notice and this permission notice are included in all copies or substantial portions of the Software.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this Telegram userbot and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-This means you can:
-
-⦁ Clone or fork this repository.
-
-⦁ Run the userbot for your own Telegram account or project.
-
-⦁ Modify the code to add features or adapt it for your own needs.
-
-⦁ Share or distribute the code, as long as my original copyright notice remains intact.
-
-
-You may NOT: 
-
-⦁ Remove or alter the copyright notice.
-
-⦁ Claim this project as entirely your own original work.
-
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the Software.
-
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
 ---
+
+### What you CAN do:
+- Clone or fork this repository.
+- Run the userbot for your own Telegram account or project.
+- Modify the code to add features or adapt it for your own needs.
+- Share or distribute the code, as long as the original copyright notice remains intact.
+
+### What you CANNOT do:
+- Remove or alter the copyright notice.
+- Claim this project as your own original work.
+
+---
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
