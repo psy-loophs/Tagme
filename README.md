@@ -21,7 +21,7 @@ Includes owner-only and allowed-users access control, and stop/start tagging sup
   - Instead of showing full usernames, the bot tag members using their first names only, making the chat cleaner.
 
 - Custom messages:
-  - Use !tagall <message> to mention all members along with your custom message.
+  - Use !tagall &lt;message&gt; to mention all members along with your custom message.
 
 Works whether you reply to a message or not.
 
