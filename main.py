@@ -52,8 +52,7 @@ async def is_authorized(user_id: int) -> bool:
 @client.on(events.NewMessage(pattern=f"^{TRIGGER_TAG}(.*)"))
 async def mention_all(event):
     global OWNER_ID
-    sender = await event.get_sender()
-    sender_id = sender.id
+    sender_id = event.sender_id  # ✅ safe: always available
     if not await is_authorized(sender_id):
         return
 
@@ -104,8 +103,7 @@ async def mention_all(event):
 @client.on(events.NewMessage(pattern=TRIGGER_STOP))
 async def stop_tagging(event):
     global OWNER_ID
-    sender = await event.get_sender()
-    sender_id = sender.id
+    sender_id = event.sender_id  # ✅ safe fix
     if not await is_authorized(sender_id):
         return
     chat_id = event.chat_id
