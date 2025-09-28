@@ -109,7 +109,7 @@ Keep the session string private — anyone with it can access your Telegram acco
 ## 3. Environment Setup
 
 Before running the userbot, you need to set up a few environment variables.  
-You can create a `.env` file in the project root or set them in your hosting platform.
+These should be set in your hosting platform’s environment settings.
 
 ### Required Variables
 
