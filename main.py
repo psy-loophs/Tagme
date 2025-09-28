@@ -1,12 +1,12 @@
 import os
 import sys
 import asyncio
+import re   # ✅ added
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from fastapi import FastAPI
 import uvicorn
 import threading
-import re
 
 # --- Environment variables ---
 API_ID = os.getenv("API_ID")
@@ -50,7 +50,7 @@ async def is_authorized(user_id: int) -> bool:
     return user_id == OWNER_ID or user_id in ALLOWED_USERS
 
 # --- Event handlers ---
-TAGALL_PATTERN = re.compile(rf"^{TRIGGER_TAG}(.*)", re.DOTALL)
+TAGALL_PATTERN = re.compile(rf"^{TRIGGER_TAG}(.*)", re.DOTALL)  # ✅ allow multiline
 
 @client.on(events.NewMessage(pattern=TAGALL_PATTERN))
 async def mention_all(event):
@@ -90,12 +90,7 @@ async def mention_all(event):
             mention = f"[{name}](tg://user?id={user.id})"
             message = mention + (f" {custom_text}" if custom_text else "")
             try:
-                await client.send_message(
-                    chat_id,
-                    message,
-                    reply_to=reply_to,
-                    parse_mode=None  # ✅ auto-detect Markdown/HTML (links, code, bold, etc.)
-                )
+                await client.send_message(chat_id, message, reply_to=reply_to)
             except Exception as e:
                 await event.reply(f"⚠ Error: {e}")
                 break
