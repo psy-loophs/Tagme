@@ -65,7 +65,8 @@ async def main():
     with open(f"{session_name}.session", "w") as f:
         f.write(client.session.save())
 
-    print(f"✅ Session file generated: {session_name}.session")
+    print(f"✅ Session file generated: {session_name}.session \n")
+    print(f"✅ session string generated copy the session string and use it in your environment \n ")
     print(f"💡 Session string:\n{client.session.save()}")
 
 with client:
