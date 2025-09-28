@@ -1,6 +1,6 @@
 # Telegram TagAll Bot (Telethon)
 
-A simple Telegram bot built with **Telethon** that can tag all users in a group.  
+A simple Telegram user bot built with **Telethon** that can tag all users in a group.  
 Includes owner-only and allowed-users access control, and stop/start tagging support.  
 
 ---
