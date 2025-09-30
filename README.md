@@ -129,3 +129,27 @@ API_ID=123456
 API_HASH=abcd1234efgh5678
 SESSION_STRING=your_generated_session_string_here
 ALLOWED_USERS=123456789,987654321
+```
+
+---
+
+##  Deployment & Command Usage
+
+## 1. Install Dependencies (build command)
+
+Make sure you have Python installed.
+
+Install the required libraries by running:
+
+```pip install -r requirements.txt ```
+
+---
+
+## 2. Start the Bot
+
+Run the bot with:
+
+``` python main.py```
+
+---
+
