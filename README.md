@@ -7,7 +7,7 @@ Includes owner-only and allowed-users access control, and stop/start tagging sup
 
 
 ## ✨ Usage
-- `/tagall` → Mentions all group members.  
+- `!tagall` → Mentions all group members.  
 - Prevents multiple tagging sessions at once.  
 - `!stop` → Stops tagging process.  
 - Access control:
