@@ -15,7 +15,7 @@ SESSION_STRING = os.getenv("SESSION_STRING")
 ALLOWED_USERS_RAW = os.getenv("ALLOWED_USERS", "").strip()
 
 
-missing = []
+"""missing = []
 if not API_ID:
     missing.append("API_ID")
 if not API_HASH:
@@ -25,7 +25,7 @@ if not SESSION_STRING:
 
 if missing:
     print(f"❌ Missing required environment variables: {', '.join(missing)}")
-    sys.exit(1)
+    sys.exit(1)"""
 
 API_ID = int(API_ID)
 
