@@ -7,7 +7,8 @@ from telethon.sessions import StringSession
 from fastapi import FastAPI
 import uvicorn
 import threading
-
+from dotenv import load_dotenv
+load_dotenv()
 
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
